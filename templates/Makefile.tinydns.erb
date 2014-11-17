@@ -1,0 +1,5 @@
+remote: data.cdb
+	scp data.cdb root@<%= @ipaddress_lo %>:/<%= @service_dir %>/<%= @tinydns_service_name %>/root/data.cdb
+
+data.cdb: data
+	<%= @installpath %>/bin/tinydns-data
