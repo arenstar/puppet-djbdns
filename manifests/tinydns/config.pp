@@ -28,7 +28,12 @@ class djbdns::tinydns::config inherits djbdns::tinydns::init {
             refreshonly => true,
             require     => [
                 Exec["${tinydns_service_name}-setup"],
+                File["${supervise_dir}/${tinydns_service_name}/root/data"]
             ];
     }
-
+    file {
+       "${supervise_dir}/${tinydns_service_name}/root/data":
+           ensure  => "present",
+           replace => "no",
+    }
 }

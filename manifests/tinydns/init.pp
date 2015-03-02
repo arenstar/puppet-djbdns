@@ -6,7 +6,7 @@ class djbdns::tinydns::init (
     $supervise_dir              = $djbdns::params::supervise_dir,
     $service_dir                = $djbdns::params::service_dir,
     $installpath                = $djbdns::params::installpath,
-    $package_name               = $djbdns::params::package,
+    $package_name               = $djbdns::params::package_name,
     $tinydns_service_name       = $djbdns::params::tinydns_service_name,
     $tinydns_service_hasrestart = $djbdns::params::tinydns_service_hasrestart,
     $tinydns_service_hasstatus  = $djbdns::params::tinydns_service_hasstatus,
@@ -26,16 +26,21 @@ class djbdns::tinydns::init (
 
     if $_package_ensure == 'absent' or $_package_ensure == 'purged' {
         anchor { 'djbdns::tinydns::begin': }
-        ~> class { 'djbdns::tinydns::service': }
+        -> class { 'djbdns::tinydns::service': }
         -> class { 'djbdns::tinydns::config': }
-        -> class { 'djbdns::tinydns::install': }
         -> anchor { 'djbdns::tinydns::end': }
     } else {
     anchor { 'djbdns::tinydns::begin': }
-        -> class { 'djbdns::tinydns::install': }
         -> class { 'djbdns::tinydns::config': }
-        ~> class { 'djbdns::tinydns::service': }
+        -> class { 'djbdns::tinydns::service': }
         -> anchor { 'djbdns::tinydns::end': }
+    }
+
+    if ! defined(Package["$package_name"]) {
+        package {
+           $package_name:
+                ensure => installed,
+        }
     }
 
 }

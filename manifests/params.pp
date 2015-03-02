@@ -42,7 +42,7 @@ class djbdns::params {
   case $::operatingsystem {
     'RedHat', 'CentOS', 'Fedora', 'Scientific', 'Amazon', 'OracleLinux', 'SLC': {
       # main application
-      $package = [ 'djbdns' ]
+      $package_name  = [ 'djbdns' ]
     }
     default: {
       fail("\"${module_name}\" provides no package default value
